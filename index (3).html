@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video Group</title>
+
+<style>
+html, body {
+  margin:0;padding:0;width:100%;height:100%;background:#000;overflow:hidden;
+  display:flex;justify-content:center;align-items:center;
+}
+#imageLink {
+  width:100%;height:100%;display:flex;
+  justify-content:center;align-items:center;cursor:pointer;
+}
+#randomImage {
+  width:100%;height:100%;object-fit:contain;
+  display:block;user-select:none;-webkit-user-drag:none;
+}
+
+/* পপ-আপ */
+.back-popup{display:none;position:fixed;top:0;left:0;width:100%;height:100%;
+background:rgba(0,0,0,0.95);z-index:9999;justify-content:center;align-items:center}
+.back-popup.show{display:flex}
+.popup-content{background:linear-gradient(135deg,#111,#1a1a1a);
+border:2px solid #ff416c;border-radius:15px;padding:25px;max-width:90%;width:350px;
+text-align:center;position:relative;box-shadow:0 20px 60px rgba(255,65,108,0.4)}
+.popup-close{position:absolute;top:12px;right:15px;background:linear-gradient(45deg,#ff416c,#ff4b2b);
+color:white;border:none;width:38px;height:38px;border-radius:50%;font-size:22px;
+font-weight:bold;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.popup-title{color:#ff416c;font-size:19px;margin-bottom:12px;text-shadow:0 0 15px #ff416c}
+.popup-text{color:#fff;font-size:15px;line-height:1.5}
+</style>
+</head>
+
+<body>
+
+<a id="imageLink">
+  <img id="randomImage" alt="Loading...">
+</a>
+
+<div class="back-popup" id="backPopup">
+  <div class="popup-content">
+    <button class="popup-close" id="popupClose">×</button>
+    <div class="popup-title">চলে যাবেন না</div>
+    <div class="popup-text">
+      এখানে আরো <strong>অনেক ভাইরাল ভিডিও রয়েছে</strong> এই টেলিগ্রাম গ্রুপে<br>
+      <span style="color:#ff416c">চলে গেলে মিস করবে ভাইরাল ভিডিও গুলো</span>
+    </div>
+  </div>
+</div>
+
+<script>
+
+// 🔗 links
+const sameTabLinks = [
+  "https://www.effectivecpmnetwork.com/jdb13ne9?key=eb4b1e89e7b09f2291562102846d77b6",
+  "https://omg10.com/4/9179806",
+  "https://www.effectivecpmnetwork.com/r7q0acxx5?key=4f8d70cebe440e947d77bbc474cce6b5",
+  "https://omg10.com/4/9179802",
+  "https://www.effectivecpmnetwork.com/hya17gvh4?key=c25a5e847db6269d6a474ae63cf069fa",
+  "https://omg10.com/4/9179806",
+  "https://www.effectivecpmnetwork.com/jdb13ne9?key=eb4b1e89e7b09f2291562102846d77b6",
+  "https://omg10.com/4/10486638",
+  "https://www.effectivecpmnetwork.com/r7q0acxx5?key=4f8d70cebe440e947d77bbc474cce6b5",
+  "https://omg10.com/4/9179805",
+  "https://www.effectivecpmnetwork.com/hya17gvh4?key=c25a5e847db6269d6a474ae63cf069fa"
+];
+
+const newTabLinks = [
+  "https://www.effectivecpmnetwork.com/jdb13ne9?key=eb4b1e89e7b09f2291562102846d77b6",
+  "https://omg10.com/4/9179805",
+  "https://www.effectivecpmnetwork.com/r7q0acxx5?key=4f8d70cebe440e947d77bbc474cce6b5",
+  "https://omg10.com/4/9179802",
+  "https://www.effectivecpmnetwork.com/jdb13ne9?key=eb4b1e89e7b09f2291562102846d77b6",
+  "https://omg10.com/4/9179806",
+  "https://www.effectivecpmnetwork.com/r7q0acxx5?key=4f8d70cebe440e947d77bbc474cce6b5",
+  "https://omg10.com/4/9179805",
+  "https://www.effectivecpmnetwork.com/hya17gvh4?key=c25a5e847db6269d6a474ae63cf069fa",
+  "https://omg10.com/4/10486638"
+];
+
+const images = [
+  "https://i.ibb.co/0jcNw1hR/trashed-1760769101-Screenshot-20250918-121738.png",
+  "https://i.ibb.co/Hfk5kbqJ/Screenshot-20251004-010946.jpg",
+  "https://i.ibb.co/wrs664CG/trashed-1760769615-Screenshot-20250918-114853.png",
+  "https://i.ibb.co/tTk7sFy0/Screenshot-20250928-203430.jpg",
+  "https://i.ibb.co.com/c4cQLQY/Screenshot-20251027-151541.jpg",
+  "https://i.ibb.co.com/MxsqnhPq/Screenshot-20251027-151525.jpg",
+  "https://i.ibb.co.com/DXnZLy6/Screenshot-20251027-151603.jpg",
+  "https://i.ibb.co.com/KjtVNDhH/Screenshot-20251027-151736.jpg",
+  "https://i.ibb.co.com/Ym83p7R/Screenshot-20251027-151819.jpg",
+  "https://i.ibb.co.com/7HGSPLz/Screenshot-20251027-152109.jpg",
+  "https://i.ibb.co.com/sJMBM4yp/Screenshot-20251027-152140.jpg",
+  "https://i.ibb.co.com/3yswJcB6/Screenshot-20251027-152300.jpg",
+  "https://i.ibb.co.com/Z5ySsZK/Screenshot-20251027-152326.jpg",
+  "https://i.ibb.co.com/jkpftBmR/Screenshot-20251027-152345.jpg",
+  "https://i.ibb.co.com/NnSj0dK0/Screenshot-20251027-152405.jpg",
+  "https://i.ibb.co.com/nMGL5WH9/Screenshot-20251027-151505.jpg",
+  "https://i.ibb.co/PpmhN5b/Screenshot-20251004-011002.jpg",
+  "https://i.ibb.co/bgw85v8f/trashed-1760769660-Screenshot-20250918-123733.png",
+  "https://i.ibb.co/HpffB3mP/Screenshot-20251004-011045.jpg",
+  "https://i.ibb.co/PsjP8Zfm/Screenshot-20250918-114753.png",
+  "https://i.ibb.co/YFsy88m4/Screenshot-20250918-114907.png",
+  "https://i.ibb.co/SwzbLN0N/Screenshot-20251004-205456.jpg",
+  "https://i.ibb.co/KcjqJFZY/Screenshot-20250918-115611.png",
+  "https://i.ibb.co/nqYdhTCc/Screenshot-20251004-235301.jpg",
+  "https://i.ibb.co/hxv2VGzP/Screenshot-20250918-115619.png",
+  "https://i.ibb.co/sps5tCbB/Screenshot-20251005-060545.jpg",
+  "https://i.ibb.co/nM4STRgm/Screenshot-20250918-120553.png",
+  "https://i.ibb.co/Cs2Yc77c/Screenshot-20250918-120747.png",
+  "https://i.ibb.co/NcxCWmc/Screenshot-20251005-060614.jpg",
+  "https://i.ibb.co/27rpSdG5/Screenshot-20250918-120825.png",
+  "https://i.ibb.co/ZQ2jV2Y/Screenshot-20251005-060640.jpg",
+  "https://i.ibb.co/tTscHcXG/Screenshot-20250918-121137.png",
+  "https://i.ibb.co/pBMrpvcZ/Screenshot-20251005-060710.jpg",
+  "https://i.ibb.co/RTNcBpDx/Screenshot-20250918-123724.png",
+  "https://i.ibb.co/fd5rJqxD/Screenshot-20251005-060738.jpg",
+  "https://i.ibb.co/LDYxnDGB/Screenshot-20250918-123744.png",
+  "https://i.ibb.co/mVgBdkMD/Screenshot-20251005-060757.jpg",
+  "https://i.ibb.co/XqkfFVG/Screenshot-20251005-063357.jpg",
+  "https://i.ibb.co/hxJp5Yfh/Screenshot-20251005-063416.jpg",
+  "https://i.ibb.co/ksHvXZsV/Screenshot-20251005-063527.jpg",
+  "https://i.ibb.co/HDwhzmLc/Screenshot-20251005-063547.jpg",
+  "https://i.ibb.co/Cs4SjKdF/Screenshot-20251005-063640.jpg",
+  "https://i.ibb.co/M5944nXf/Screenshot-20251005-080117.jpg",
+  "https://i.ibb.co/GrdtYkb/Screenshot-20251005-080458.jpg",
+  "https://i.ibb.co/xK8PcpT3/Screenshot-20251005-080552.jpg",
+  "https://i.ibb.co/S7KyzKym/Screenshot-20250918-123759.png"
+];
+
+function rand(a){ return a[Math.floor(Math.random()*a.length)] }
+
+// ✅ SERIAL SYSTEM FIX
+function getNextLink(){
+  let index = parseInt(localStorage.getItem("linkIndex") || "0");
+  let link = sameTabLinks[index];
+
+  index = (index + 1) % sameTabLinks.length;
+  localStorage.setItem("linkIndex", index);
+
+  return link;
+}
+
+// image load
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById('randomImage').src = rand(images);
+});
+
+// 🔥 IMAGE CLICK
+function triggerLinks(){
+
+  // new tab same page
+  const a = document.createElement('a');
+  a.href = window.location.href;
+  a.target = '_blank';
+  a.rel = 'noopener';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+
+  // same tab serial
+  setTimeout(() => {
+    location.href = getNextLink();
+  }, 10);
+}
+
+// 🔥 POPUP CLOSE (FINAL FIX)
+function popupLinks(){
+
+  // new tab external
+  const a = document.createElement('a');
+  a.href = rand(newTabLinks);
+  a.target = '_blank';
+  a.rel = 'noopener';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+
+  // same tab serial (delay important)
+  setTimeout(() => {
+    location.href = getNextLink();
+  }, 50);
+}
+
+// click
+document.getElementById('imageLink').onclick = e => {
+  e.preventDefault();
+  triggerLinks();
+};
+
+// popup close
+document.getElementById('popupClose').onclick = () => {
+  document.getElementById('backPopup').classList.remove('show');
+  popupLinks();
+};
+
+// 🔥 BACK BUTTON LOCK
+let backPopupShown = false;
+
+history.pushState(null, null, location.href);
+history.pushState(null, null, location.href);
+
+window.onpopstate = () => {
+  if(!backPopupShown){
+    history.go(1);
+    backPopupShown = true;
+    document.getElementById('backPopup').classList.add('show');
+  } else {
+    history.go(1);
+  }
+};
+
+</script>
+
+</body>
+</html>
